@@ -17,9 +17,10 @@ class Contact(Base):
     phone_number = Column(String, nullable=False)
     birthday = Column(Date, nullable=False)
     additional_data = Column(String, nullable=True)
-    user_id = Column('users_id', ForeignKey(
-        'users.id', ondelete='CASCADE'), default=None)
-    user = relationship('User', backref='contacts')
+    user_id = Column(
+        "users_id", ForeignKey("users.id", ondelete="CASCADE"), default=None
+    )
+    user = relationship("User", backref="contacts")
 
 
 class User(Base):

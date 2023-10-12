@@ -7,6 +7,11 @@
 - Бібліотека sqlalchemy
 - Бібліотека psycopg2
 - Інструмент роботи з міграціями alembic
+- Бібліотека python-multipart
+- Бібліотека passlib["bcrypt"]
+- Бібліотека python-jose["cryptography"]
+- Бібліотека libgravatar
+
 
 ## Встановлення та налаштування
 

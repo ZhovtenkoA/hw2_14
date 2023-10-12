@@ -9,11 +9,21 @@ from hw2_11.schemas import ContactBase
 
 
 async def get_contacts(skip: int, limit: int, user: User, db: Session) -> List[Contact]:
-    return db.query(Contact).filter(Contact.user_id == user.id).offset(skip).limit(limit).all()
+    return (
+        db.query(Contact)
+        .filter(Contact.user_id == user.id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
 async def get_contact(contact_id: int, user: User, db: Session) -> Contact:
-    return db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
+    return (
+        db.query(Contact)
+        .filter(and_(Contact.id == contact_id, Contact.user_id == user.id))
+        .first()
+    )
 
 
 async def create_contact(body: ContactBase, user: User, db: Session) -> Contact:
@@ -24,7 +34,7 @@ async def create_contact(body: ContactBase, user: User, db: Session) -> Contact:
         phone_number=body.phone_number,
         birthday=body.birthday,
         additional_data=body.additional_data,
-        user_id=user.id
+        user_id=user.id,
     )
     db.add(contact)
     db.commit()
@@ -32,15 +42,20 @@ async def create_contact(body: ContactBase, user: User, db: Session) -> Contact:
     return contact
 
 
-async def update_contact(contact_id: int, body: ContactBase, user: User, db: Session) -> Contact | None:
-    contact = db.query(Contact).filter(
-        and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
+async def update_contact(
+    contact_id: int, body: ContactBase, user: User, db: Session
+) -> Contact | None:
+    contact = (
+        db.query(Contact)
+        .filter(and_(Contact.id == contact_id, Contact.user_id == user.id))
+        .first()
+    )
     if contact:
-        contact.first_name = body.first_name,
-        contact.last_name = body.last_name,
-        contact.email = body.email,
-        contact.phone_number = body.phone_number,
-        contact.birthday = body.birthday,
+        contact.first_name = (body.first_name,)
+        contact.last_name = (body.last_name,)
+        contact.email = (body.email,)
+        contact.phone_number = (body.phone_number,)
+        contact.birthday = (body.birthday,)
         contact.additional_data = body.additional_data
         contact.user_id = user.id
         db.commit()
@@ -48,8 +63,11 @@ async def update_contact(contact_id: int, body: ContactBase, user: User, db: Ses
 
 
 async def remove_contact(contact_id: int, user: User, db: Session) -> Contact | None:
-    contact = db.query(Contact).filter(
-        and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
+    contact = (
+        db.query(Contact)
+        .filter(and_(Contact.id == contact_id, Contact.user_id == user.id))
+        .first()
+    )
     if contact:
         db.delete(contact)
         db.commit()
@@ -58,18 +76,27 @@ async def remove_contact(contact_id: int, user: User, db: Session) -> Contact | 
 
 async def search_contacts(query: str, user: User, db: Session) -> List[Contact]:
     response = []
-    search_by_first_name = db.query(Contact).filter(
-        and_(Contact.first_name.like(f'%{query}%'), Contact.user_id == user.id)).all()
+    search_by_first_name = (
+        db.query(Contact)
+        .filter(and_(Contact.first_name.like(f"%{query}%"), Contact.user_id == user.id))
+        .all()
+    )
     if search_by_first_name:
         for i in search_by_first_name:
             response.append(i)
-    search_by_last_name = db.query(Contact).filter(
-        and_(Contact.last_name.like(f'%{query}%'), Contact.user_id == user.id)).all()
+    search_by_last_name = (
+        db.query(Contact)
+        .filter(and_(Contact.last_name.like(f"%{query}%"), Contact.user_id == user.id))
+        .all()
+    )
     if search_by_last_name:
         for i in search_by_last_name:
             response.append(i)
-    search_by_email = db.query(Contact).filter(
-        and_(Contact.email.like(f'%{query}%'), Contact.user_id == user.id)).all()
+    search_by_email = (
+        db.query(Contact)
+        .filter(and_(Contact.email.like(f"%{query}%"), Contact.user_id == user.id))
+        .all()
+    )
     if search_by_email:
         for i in search_by_email:
             response.append(i)
@@ -81,7 +108,14 @@ async def get_birthday_per_week(days: int, user: User, db: Session) -> Contact:
     response = []
     all_contacts = db.query(Contact).filter(Contact.user_id == user.id).all()
     for contact in all_contacts:
-        if timedelta(0) <= ((contact.birthday.replace(year=int((datetime.now()).year))) - datetime.now().date()) <= timedelta(days):
+        if (
+            timedelta(0)
+            <= (
+                (contact.birthday.replace(year=int((datetime.now()).year)))
+                - datetime.now().date()
+            )
+            <= timedelta(days)
+        ):
             response.append(contact)
 
     return response

@@ -11,7 +11,6 @@ class ContactBase(BaseModel):
     additional_data: str = None
 
 
-
 class ContactResponse(ContactBase):
     id: int = 1
     first_name: str = "John"
