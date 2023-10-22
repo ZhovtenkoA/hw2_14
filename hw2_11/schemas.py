@@ -1,51 +1,46 @@
-from datetime import datetime, date
 from pydantic import BaseModel, Field, EmailStr
+from datetime import date
 
-
-class ContactBase(BaseModel):
+class ContactModel(BaseModel):
     first_name: str
     last_name: str
-    email: EmailStr
-    phone_number: str
+    email: str
+    phone: str
     birthday: date
-    additional_data: str = None
-
-
-class ContactResponse(ContactBase):
-    id: int = 1
-    first_name: str = "John"
-    last_name: str = "Snow"
-    email: EmailStr = "example@mail.com"
-    phone_number: str = "0635555555"
-    birthday: date = date(year=1999, month=10, day=5)
-    additional_data: str = "Cats lover"
-
+    
+class ResponseContact(BaseModel):
+    id: int
+    first_name: str
+    last_name: str
+    email: str
+    phone: str
+    birthday: date
+    
     class Config:
-        orm_mode = True
-
-
+        from_attributes = True
+        
 class UserModel(BaseModel):
     username: str = Field(min_length=5, max_length=16)
-    email: EmailStr
+    email: str
     password: str = Field(min_length=6, max_length=10)
-
-
+    
 class UserDb(BaseModel):
     id: int
     username: str
-    email: EmailStr
+    email: str
     avatar: str
-
+    
     class Config:
-        orm_mode = True
-
-
-class UserResponse(BaseModel):
+        form_attributes = True
+        
+class ResponseUser(BaseModel):
     user: UserDb
-    detail: str = "User successfully created"
-
-
+    detatil: str = "User successfully created"
+    
 class TokenModel(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+    
+class EmailSchema(BaseModel):
+    email: EmailStr
