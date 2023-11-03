@@ -34,7 +34,7 @@ def test_login_user_not_confirmed(client, user):
     data = response.json()
     assert data["detail"] == "Email not confirmed"
 
-'''
+
 def test_login_user(client, session, user):
     current_user: User = session.query(User).filter(User.email == user.get('email')).first()
     current_user.confirmed = True
@@ -46,8 +46,8 @@ def test_login_user(client, session, user):
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["token_type"] == "bearer"
-'''
-'''
+
+
 def test_login_wrong_password(client, user):
     response = client.post(
         "/api/auth/login",
@@ -56,8 +56,8 @@ def test_login_wrong_password(client, user):
     assert response.status_code == 401, response.text
     data = response.json()
     assert data["detail"] == "Invalid password"
-'''
-'''
+
+
 def test_login_wrong_email(client, user):
     response = client.post(
         "/api/auth/login",
@@ -66,11 +66,10 @@ def test_login_wrong_email(client, user):
     assert response.status_code == 401, response.text
     data = response.json()
     assert data["detail"] == "Invalid email"
-'''
-'''
+
+
 def test_request_email(client, user, monkeypatch):
     mock_send_email = MagicMock()
     monkeypatch.setattr("hw2_11.routes.auth.send_email", mock_send_email)
     response = client.post("/api/auth/request_email", json=user)
     assert response.status_code == 200, response.text
-'''

@@ -21,6 +21,20 @@ origins = [
     "http://localhost:3000"
     ]
 
+
+
+@app.on_event("startup")
+async def startup():
+    """
+    The startup function is called when the application starts up.
+    It's a good place to initialize things that are needed by your app, like database connections or caches.
+    
+    :return: A list of coroutines
+    """
+    print('------------- STARTUP --------------')
+    r = await redis.Redis(host='localhost', port=6379, db=0, encoding="utf-8", decode_responses=True)
+    await FastAPILimiter.init(r)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -28,10 +42,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app.include_router(auth.router, prefix="/api")
-app.include_router(contacts.router, prefix="/api")
-app.include_router(users.router, prefix="/api")
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
@@ -49,17 +59,7 @@ async def add_process_time_header(request: Request, call_next):
     response.headers["My-Process-Time"] = str(process_time)
     return response
 
-@app.on_event("startup")
-async def startup():
-    """
-    The startup function is called when the application starts up.
-    It's a good place to initialize things that are needed by your app, like database connections or caches.
-    
-    :return: A list of coroutines
-    """
-    print('------------- STARTUP --------------')
-    r = await redis.Redis(host='localhost', port=6379, db=0, encoding="utf-8", decode_responses=True)
-    await FastAPILimiter.init(r)
+
 
 @app.get("/", name='Корень')
 def read_root():
@@ -93,6 +93,8 @@ def healthchecher(db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail="Error connecting to the database")
 
+app.include_router(auth.router, prefix="/api")
+app.include_router(contacts.router, prefix="/api")
+app.include_router(users.router, prefix="/api")
 
-if __name__ == '__main__':
-    uvicorn.run(app="main:app", reload=True)
+
