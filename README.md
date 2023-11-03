@@ -1,21 +1,4 @@
-Перед початком роботи переконайтеся, що встановлені наступні компоненти:
-
-- Python 3.x
-- Фреймворк fastapi
-- Бібліотека uvicorn
-- Бібліотека fastapi
-- Бібліотека sqlalchemy
-- Бібліотека psycopg2
-- Інструмент роботи з міграціями alembic
-- Бібліотека python-multipart
-- Бібліотека passlib["bcrypt"]
-- Бібліотека python-jose["cryptography"]
-- Бібліотека libgravatar
-- Бібліотека fastapi-mail
-- Бібліотека cloudinary
-- Бібліотека fastapi-limiter
-- Бібліотека pydantic-settings
-
+Перед початком роботи переконайтеся, що встановлені наступні компоненти та залежності з pyproject.toml
 
 ## Встановлення та налаштування
 
@@ -42,4 +25,5 @@ CLOUDINARY_API_SECRET=
 4. Створіть підключення до бази даних Postgres та Redis за допомогою команди  docker-compose up
 5. Запустіть сервер командою uvicorn main:app --reload
 6. Відкрийте документацію Swagger за посиланням http://localhost:8000/docs. Також для авторизації та виконання запитів можна використовувати Postman.
+
 
