@@ -7,22 +7,34 @@ readme = "README.md"
 packages = [{include = "hw2_11"}]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-fastapi = "^0.103.2"
-uvicorn = {extras = ["standard"], version = "^0.23.2"}
-sqlalchemy = "^2.0.21"
-psycopg2 = "^2.9.9"
+python = "3.10.8"
 alembic = "^1.12.0"
+psycopg2 = "^2.9.9"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+fastapi = "^0.103.2"
 libgravatar = "^1.0.4"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.6"
+jwt = "^1.3.1"
 fastapi-mail = "^1.4.1"
-cloudinary = "^1.36.0"
-fastapi-limiter = "^0.1.5"
+pydentic = "^0.0.1.dev3"
+pydantic = {extras = ["dotenv"], version = "^2.4.2"}
 pydantic-settings = "^2.0.3"
+fastapi-limiter = "^0.1.5"
+cloudinary = "^1.36.0"
 python-dotenv = "^1.0.0"
+python-decouple = "^3.8"
+decouple = "^0.0.7"
+pytest = "^7.4.3"
+httpx = "^0.25.0"
 
+
+[tool.poetry.group.dev.dependencies]
+sphinx = "^7.2.6"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
 
 [build-system]
 requires = ["poetry-core"]
