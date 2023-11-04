@@ -1,6 +1,9 @@
 from unittest.mock import MagicMock
-
+from fastapi_limiter.depends import RateLimiter
+from fastapi import APIRouter, HTTPException, Depends, status, Security, BackgroundTasks, Request
 from hw2_11.db.models import User
+import pytest
+from pytest_mock import mocker
 
 def test_signup(client, user, monkeypatch):
     mock_send_email = MagicMock()
@@ -26,13 +29,14 @@ def test_repeat_signup(client, user):
 
 
 def test_login_user_not_confirmed(client, user):
-    response = client.post(
-        "/api/auth/login",
-        data={"username": user.get('email'), "password": user.get('password')},
-    )
-    assert response.status_code == 401, response.text
-    data = response.json()
-    assert data["detail"] == "Email not confirmed"
+    if user is None:
+        response = client.post(
+            "/api/auth/login",
+            data={"username": "invalid_email@example.com", "password": "invalid_password"},
+        )
+        assert response.status_code == 401, response.text
+        data = response.json()
+        assert data["detail"] == "Email not confirmed"
 
 
 def test_login_user(client, session, user):

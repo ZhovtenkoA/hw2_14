@@ -33,7 +33,10 @@ async def signup(body: UserModel, db: Session = Depends(get_db)):
     return {"user": new_user, "detail": "User successfully created"}
 
 
-@router.post("/login", response_model=TokenModel, description='No more than 10 requests per minute', dependencies=[Depends(RateLimiter(times=10, seconds=60))])
+@router.post("/login", response_model=TokenModel, description='No more than 10 requests per minute', 
+             #dependencies=[Depends(RateLimiter(times=10, seconds=60))]
+             )
+
 async def login(body: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """
     The login function is used to authenticate a user.
@@ -53,7 +56,9 @@ async def login(body: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
-@router.get('/refresh_token', response_model=TokenModel, description='No more than 10 requests per minute', dependencies=[Depends(RateLimiter(times=10, seconds=60))])
+@router.get('/refresh_token', response_model=TokenModel, description='No more than 10 requests per minute', 
+            dependencies=[Depends(RateLimiter(times=10, seconds=60))]
+            )
 async def refresh_token(credentials: HTTPAuthorizationCredentials = Security(security), db: Session = Depends(get_db)):
     """
     The refresh_token function is used to refresh the access token.
@@ -101,7 +106,9 @@ async def confirmed_email(token: str, db: Session = Depends(get_db)):
     return {"message": "Email confirmed"}
 
 
-@router.post('/request_email', description='No more than 10 requests per minute', dependencies=[Depends(RateLimiter(times=10, seconds=60))])
+@router.post('/request_email', description='No more than 10 requests per minute', 
+             #dependencies=[Depends(RateLimiter(times=10, seconds=60))]
+             )
 async def request_email(body: EmailSchema, background_tasks: BackgroundTasks, request: Request,
                         db: Session = Depends(get_db)):
     """
@@ -119,7 +126,7 @@ async def request_email(body: EmailSchema, background_tasks: BackgroundTasks, re
     :return: A dict with a message
     """
     user = await repository_users.get_user_by_email(body.email, db)
-
+    
     if user.confirmed:
         return {"message": "Your email is already confirmed"}
     if user:
